@@ -1,0 +1,25 @@
+[
+    {
+        "name": "Default",
+        "settings": {
+            "length": 16,
+            "characterSet": [
+                "lowercase",
+                "UPPERCASE",
+                "Numbers",
+                "Special"
+            ]
+        }
+    },
+    {
+        "name": "Test",
+        "settings": {
+            "length": 90,
+            "characterSet": [
+                "lowercase",
+                "UPPERCASE",
+                "Numbers"
+            ]
+        }
+    }
+]
