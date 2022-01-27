@@ -88,23 +88,84 @@ async function generatePasswordProfile() {
 		const profile = profiles.filter(profile => profile.name === answers.profile)[0];
 		const passwordLength = profile.settings.length;
 		const passwordCharset = profile.settings.characterSet;
-		const passwordCount = answers.count;
-		const configCharsets = config.characterSets;
-		console.log(chalk.cyan.bold("Passwords\n"));
-		for (let i = 0; i < passwordCount; i++) {
-			let password = "";
-			for (let j = 0; j < passwordLength; j++) {
-				const cs = configCharsets[passwordCharset[Math.floor(Math.random() * passwordCharset.length)]];
-				password += cs[Math.floor(Math.floor(Math.random() * cs.length))];
-			}
-			console.log(chalk.green.bold(password));
-		}
+		const passwordCount = Math.round(answers.count);
+		passgen(passwordLength, passwordCharset, passwordCount);
 	});
-	console.log();
 	return backToModeSelect();
 }
 
+function passgen(length, charset, count) {
+	const configCharsets = config.characterSets;
+	console.log(chalk.cyan.bold("Passwords\n"));
+	for (let i = 0; i < count; i++) {
+		let password = "";
+		for (let j = 0; j < length; j++) {
+			const cs = configCharsets[charset[Math.floor(Math.random() * charset.length)]];
+			password += cs[Math.floor(Math.floor(Math.random() * cs.length))];
+		}
+		console.log(chalk.green.bold(password));
+	}
+	console.log();
+}
+
 async function generatePassword() {
+	const questions = [
+		{
+			name: "length",
+			type: "number",
+			message: "Password length",
+			default() {
+				return 1;
+			},
+			validate(value) {
+				if (value < 1) return "Your password needs to be at least 1 character long.";
+				return true;
+			},
+		},
+		{
+			name: "characterSet",
+			type: "checkbox",
+			message: "Character Sets",
+			choices: [
+				{
+					name: "lowercase",
+				},
+				{
+					name: "UPPERCASE",
+				},
+				{
+					name: "Numbers",
+				},
+				{
+					name: "Special",
+				}
+			],
+			validate(answer) {
+				if (answer.length < 1) return "You need to pick at least one character set.";
+				return true;
+			},
+		},
+		{
+			name: "count",
+			type: "number",
+			message: "Number of passwords",
+			default() {
+				return 1;
+			},
+			validate(value) {
+				if (value < 1) return "You need to generate at least 1 password."
+				return true;
+			}
+		},
+	];
+
+	await inquirer.prompt(questions).then(answers => {
+		const passwordLength = Math.round(answers.length);
+		const passwordCharset = answers.characterSet;
+		const passwordCount = Math.round(answers.count);
+		passgen(passwordLength, passwordCharset, passwordCount);
+	});
+
 	return backToModeSelect();
 }
 
@@ -163,7 +224,7 @@ async function createProfile() {
 				return true;
 			}
 		}
-	]
+	];
 
 	await inquirer.prompt(questions).then(answers => {
 		const profileData = {
