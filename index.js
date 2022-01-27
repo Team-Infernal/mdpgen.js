@@ -3,7 +3,6 @@ import chalk from "chalk";
 import inquirer from "inquirer";
 import gradient from "gradient-string";
 import figlet from "figlet";
-import { createSpinner } from "nanospinner";
 import { createRequire } from "module";
 import * as fs from "fs";
 const require = createRequire(import.meta.url);
