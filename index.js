@@ -91,21 +91,8 @@ async function generatePasswordProfile() {
 		const passwordCount = Math.round(answers.count);
 		passgen(passwordLength, passwordCharset, passwordCount);
 	});
+	
 	return backToModeSelect();
-}
-
-function passgen(length, charset, count) {
-	const configCharsets = config.characterSets;
-	console.log(chalk.cyan.bold("Passwords\n"));
-	for (let i = 0; i < count; i++) {
-		let password = "";
-		for (let j = 0; j < length; j++) {
-			const cs = configCharsets[charset[Math.floor(Math.random() * charset.length)]];
-			password += cs[Math.floor(Math.floor(Math.random() * cs.length))];
-		}
-		console.log(chalk.green.bold(password));
-	}
-	console.log();
 }
 
 async function generatePassword() {
@@ -169,11 +156,26 @@ async function generatePassword() {
 	return backToModeSelect();
 }
 
+function passgen(length, charset, count) {
+	const configCharsets = config.characterSets;
+	console.log(chalk.cyan.bold("Passwords\n"));
+	for (let i = 0; i < count; i++) {
+		let password = "";
+		for (let j = 0; j < length; j++) {
+			const cs = configCharsets[charset[Math.floor(Math.random() * charset.length)]];
+			password += cs[Math.floor(Math.floor(Math.random() * cs.length))];
+		}
+		console.log(chalk.green.bold(password));
+	}
+	console.log();
+}
+
 async function viewProfiles() {
 	console.log(chalk.cyan.bold("\nAvailable profiles:\n"));
 	for (const profile of profiles) {
 		console.log(`${chalk.blue.bold(profile.name)}\n - Length: ${chalk.blue(profile.settings.length)}\n - Character set: ${chalk.blue(profile.settings.characterSet.join(", "))}\n`)
 	}
+
 	return backToModeSelect();
 }
 
@@ -239,6 +241,7 @@ async function createProfile() {
 		fs.writeFileSync("profiles.json", profilesJson);
 		console.log(chalk.green.bold(`Successfully added ${answers.name}!\n`));
 	});
+
 	return backToModeSelect();
 }
 
@@ -260,6 +263,7 @@ async function deleteProfile() {
 		fs.writeFileSync("profiles.json", profilesJson);
 		console.log(chalk.green.bold(`Successfully deleted ${answers.profiles.join(", ")}!\n`));
 	});
+
 	return backToModeSelect();
 }
 

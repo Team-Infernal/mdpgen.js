@@ -10,16 +10,5 @@
                 "Special"
             ]
         }
-    },
-    {
-        "name": "Test",
-        "settings": {
-            "length": 90,
-            "characterSet": [
-                "lowercase",
-                "UPPERCASE",
-                "Numbers"
-            ]
-        }
     }
 ]
